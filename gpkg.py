@@ -23,12 +23,49 @@ pkgName = str(sys.argv[1]);
 def pkgClone():
     os.system("git clone --quiet https://github.com/"+pkgName+" >> /dev/null");
 
+def detectLanguage(repolang):
+    pkgFiles = str(os.listdir(reponame));
+    switch(os.listdir(reponame)) 
+    {
+        case ".c" in pkgFiles:
+            print("Language is: C");
+            break;
+
+        case ".cpp" in pkgFiles:
+            print("Language is: C++");
+            break;
+
+        case ".rs" in pkgFiles:
+            print("Language is: Rust");
+            break;
+
+        case ".py" in pkgFiles:
+            print("Language is: Python");
+            break;
+        
+        default:
+            print("Language couldn't be detected")
+
+
+        # case pkgFiles.find(".c"):
+        #     print("Language is: C");
+
+        # case pkgFiles.find(".cpp"):
+        #     print("Language is: C++");
+
+        # case pkgFiles.find(".rs"):
+        #     print("Language is: Rust");
+
+        # case pkgFiles.find(".py"):
+        #     print("Language is: Python");
+    }
+
 def pkgInstall():
     repoarray = pkgName.split("/");
     username = repoarray[0];
     reponame = repoarray[1];
 
-    pkgFiles = str(os.listdir(reponame))
+    pkgFiles = str(os.listdir(reponame));
     os.chdir(reponame);
 
     # switch (pkgFiles) {
@@ -69,6 +106,8 @@ while pkgCloneT.is_alive():
         time.sleep(0.004); 
     os.system("clear");
 pkgCloneT.join();
+
+detectLanguage();
 
 pkgInstallT = Thread(target = pkgInstall)
 pkgInstallT.start();
