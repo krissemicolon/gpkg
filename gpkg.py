@@ -1,9 +1,10 @@
 #!/usr/bin/python
 
 import sys
-import getopt
+import argparse
 import os
 import time
+import subprocess
 from threading import Thread
 
 def progressbar(it, prefix="", size=60, file=sys.stdout):
@@ -21,44 +22,35 @@ def progressbar(it, prefix="", size=60, file=sys.stdout):
 
 pkgName = str(sys.argv[1]);
 def pkgClone():
-    os.system("git clone --quiet https://github.com/"+pkgName+" >> /dev/null");
+    subprocess.run("git clone --depth 1 --quiet https://github.com/"+pkgName, shell=True);
 
-def detectLanguage(repolang):
-    pkgFiles = str(os.listdir(reponame));
-    switch(os.listdir(reponame)) 
-    {
-        case ".c" in pkgFiles:
-            print("Language is: C");
-            break;
+# def detectLanguage(repolang):
+#     pkgFiles = str(os.listdir(reponame));
 
-        case ".cpp" in pkgFiles:
-            print("Language is: C++");
-            break;
+#     langswitch = {
+            
+#     }
+#     switch(os.listdir(reponame)) 
+#     {
+#         case ".c" in pkgFiles:
+#             print("Language is: C");
+#             break;
 
-        case ".rs" in pkgFiles:
-            print("Language is: Rust");
-            break;
+#         case ".cpp" in pkgFiles:
+#             print("Language is: C++");
+#             break;
 
-        case ".py" in pkgFiles:
-            print("Language is: Python");
-            break;
+#         case ".rs" in pkgFiles:
+#             print("Language is: Rust");
+#             break;
+
+#         case ".py" in pkgFiles:
+#             print("Language is: Python");
+#             break;
         
-        default:
-            print("Language couldn't be detected")
-
-
-        # case pkgFiles.find(".c"):
-        #     print("Language is: C");
-
-        # case pkgFiles.find(".cpp"):
-        #     print("Language is: C++");
-
-        # case pkgFiles.find(".rs"):
-        #     print("Language is: Rust");
-
-        # case pkgFiles.find(".py"):
-        #     print("Language is: Python");
-    }
+#         default:
+#             print("Language couldn't be detected")
+#     }
 
 def pkgInstall():
     repoarray = pkgName.split("/");
@@ -80,23 +72,23 @@ def pkgInstall():
     # }
 
     if "configure" in pkgFiles:
-        os.system("autoreconf -i >> /dev/null");
-        os.system("./configure >> /dev/null");
+        subprocess.run("autoreconf -i", shell=True);
+        subprocess.run("./configure", shell=True);
 
     if "Makefile" in pkgFiles:
-        os.system("make --silent >> /dev/null");
+        subprocess.run("make --silent", shell=True);
         fs = open("Makefile", "r");
         makefileContent = fs.read();
 
         if "build" in makefileContent:
-            os.system("make --silent build >> /dev/null");
+            subprocess.run("make --silent build", shell=True);
 
         if "install" in makefileContent:
-            os.system("make --silent install >> /dev/null");
+            subprocess.run("make --silent install", shell=True);
 
     
     if "install.sh" in pkgFiles:
-        os.system("./install.sh >> /dev/null");
+        subprocess.run("./install.sh", shell=True);
 
 
 pkgCloneT = Thread(target = pkgClone)
@@ -104,16 +96,16 @@ pkgCloneT.start();
 while pkgCloneT.is_alive():
     for i in progressbar(range(100), "Cloning Repository: ", 40):
         time.sleep(0.004); 
-    os.system("clear");
+    # subprocess.run("clear");
 pkgCloneT.join();
 
-detectLanguage();
+# detectLanguage();
 
 pkgInstallT = Thread(target = pkgInstall)
 pkgInstallT.start();
 while pkgInstallT.is_alive():
     for i in progressbar(range(100), "Installing: ", 40):
         time.sleep(0.004);
-    os.system("clear");
+    # subprocess.run("clear");
 pkgInstallT.join();
 
