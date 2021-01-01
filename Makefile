@@ -1,5 +1,8 @@
-make install:
-	cp -f gpkg.py /usr/bin/gpkg
+build:
+	crystal build src/main.cr -o gpkg
 
-make uninstall:
-	rm /usr/bin/gpkg
+install:
+	mv gpkg /usr/local/bin	
+
+uninstall:
+	rm -f /usr/local/bin/gpkg

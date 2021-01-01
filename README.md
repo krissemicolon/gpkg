@@ -1,2 +1,10 @@
 # 📦 gpkg
-very simple git package manager
+# Installation
+```
+make
+make install
+```
+# Uninstallation
+```
+make uninstall
+```
